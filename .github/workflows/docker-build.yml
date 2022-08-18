@@ -1,0 +1,16 @@
+name: Docker Worker Service Example
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker build app
+        run: |
+          docker build ./src -t graham28ppb/example1
