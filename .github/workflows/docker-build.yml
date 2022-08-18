@@ -1,4 +1,4 @@
-name: Docker Worker Service Example
+name: Kafka Integration Tests
 
 on:
   push:
