@@ -14,3 +14,11 @@ jobs:
       - name: docker build app
         run: |
           docker build ./src -t graham28ppb/example1
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute tests
+        working-directory: ./KafkaIntgrationTestsInGithubActions
+        run: docker-compose up
