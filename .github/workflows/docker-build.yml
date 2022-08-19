@@ -20,5 +20,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Execute tests
-        working-directory: ./KafkaIntgrationTestsInGithubActions
+        working-directory: ./src
         run: docker-compose up
