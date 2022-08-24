@@ -25,7 +25,7 @@ namespace Tests
             var producer = new ProducerBuilder<Null, string>(config).Build();
             _logger.LogInformation("logger working");
             Console.WriteLine("Console working");
-            //var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
             //_logger.LogInformation(response.ToString());
             
         }
