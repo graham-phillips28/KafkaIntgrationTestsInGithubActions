@@ -19,7 +19,8 @@ namespace Tests
 
             var producer = new ProducerBuilder<Null, string>(config).Build();
 
-            var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            //var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            
         }
 
         [Fact]
@@ -34,10 +35,10 @@ namespace Tests
 
             var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
 
-            consumer.Subscribe("test");
+            //consumer.Subscribe("test");
 
             //var consumeResult = consumer.Consume(new CancellationToken());
-            consumer.Close();
+            //consumer.Close();
         }
     }
 }
