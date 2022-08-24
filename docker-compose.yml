@@ -43,6 +43,6 @@ services:
     volumes:
       - ./Tests:/test
     working_dir: /test
-    command: "dotnet test Tests.csproj --logger GitHubActions"
+    command: "dotnet test Tests.csproj"
     depends_on:
       - kafka1
