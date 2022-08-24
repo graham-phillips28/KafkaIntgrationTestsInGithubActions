@@ -9,9 +9,9 @@ namespace Tests
     {
         private readonly ILogger<KafkaTests> _logger;
 
-        public KafkaTests(ILogger<KafkaTests> logger)
+        public KafkaTests()
         {
-            _logger = logger;
+            _logger = new Logger<KafkaTests>(new LoggerFactory());
         }
 
         [Fact]
@@ -24,8 +24,8 @@ namespace Tests
 
             var producer = new ProducerBuilder<Null, string>(config).Build();
             _logger.LogInformation("logger working");
-            var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
-            _logger.LogInformation(response.ToString());
+            //var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            //_logger.LogInformation(response.ToString());
             
         }
 
@@ -34,7 +34,7 @@ namespace Tests
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "kafka1:9092",
+                BootstrapServers = "lkafka1:9092",
                 GroupId = "foo",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
