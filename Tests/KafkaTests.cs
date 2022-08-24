@@ -17,9 +17,11 @@ namespace Tests
             var producer = GetTestProducer();
 
             //Act
+            Console.WriteLine($"Attempt to produce message: {testMessage}");
             producer.Produce("test-topic", new Message<Null, string> { Value = testMessage });
             consumer.Subscribe("test-topic");
             var consumeResult = consumer.Consume(new CancellationToken());
+            Console.WriteLine($"Consumed message: {consumeResult.Message.Value}");
             consumer.Close();
 
             //Assert
