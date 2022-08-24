@@ -14,12 +14,13 @@ namespace Tests
         {
             var config = new ProducerConfig
             {
-                BootstrapServers = "127.0.0.1:9092",
+                BootstrapServers = "kafka1:9092",
             };
 
             var producer = new ProducerBuilder<Null, string>(config).Build();
-
-            //var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            _logger.LogInformation("logger working");
+            var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
+            _logger.LogInformation(response.ToString());
             
         }
 
@@ -28,7 +29,7 @@ namespace Tests
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "127.0.0.1:9092",
+                BootstrapServers = "kafka1:9092",
                 GroupId = "foo",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
