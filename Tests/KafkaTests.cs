@@ -9,6 +9,11 @@ namespace Tests
     {
         private readonly ILogger<KafkaTests> _logger;
 
+        public KafkaTests(ILogger<KafkaTests> logger)
+        {
+            _logger = logger;
+        }
+
         [Fact]
         public async Task Test1Async()
         {
