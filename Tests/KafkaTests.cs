@@ -1,11 +1,14 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading;
 
 namespace Tests
 {
-    public class UnitTest1
+    public class KafkaTests
     {
+        private readonly ILogger<KafkaTests> _logger;
+
         [Fact]
         public async Task Test1Async()
         {
