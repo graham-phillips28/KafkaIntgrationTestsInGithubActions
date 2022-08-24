@@ -13,7 +13,7 @@ jobs:
 
       - name: docker build app
         run: |
-          docker build ./src -t graham28ppb/example1
+          docker build ./src
   test:
     runs-on: ubuntu-latest
     steps:
