@@ -7,45 +7,37 @@ namespace Tests
 {
     public class KafkaTests
     {
-        private readonly ILogger<KafkaTests> _logger;
-
-        public KafkaTests()
-        {
-            _logger = new Logger<KafkaTests>(new LoggerFactory());
-        }
 
         [Fact]
         public async Task Test1Async()
         {
-            var config = new ProducerConfig
+            var testMessage = "test message";
+            var produceConfig = new ProducerConfig
             {
-                BootstrapServers = "kafka1:9092",
+                BootstrapServers = "kafka1:19092",
             };
-
-            var producer = new ProducerBuilder<Null, string>(config).Build();
-            _logger.LogInformation("logger working");
-            Console.WriteLine("Console working");
-            var response = await producer.ProduceAsync("test", new Message<Null, string> { Value = "message" });
-            //_logger.LogInformation(response.ToString());
-            
-        }
-
-        [Fact]
-        public async Task Test2Async()
-        {
-            var config = new ConsumerConfig
+            var consumeConfig = new ConsumerConfig
             {
-                BootstrapServers = "lkafka1:9092",
-                GroupId = "foo",
+                BootstrapServers = "kafka1:19092",
+                GroupId = "test-group-id",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+            var consumer = new ConsumerBuilder<Null, string>(consumeConfig).Build();
 
-            //consumer.Subscribe("test");
+            
+            
+            var producer = new ProducerBuilder<Null, string>(produceConfig).Build();
+            Console.WriteLine("Console working");
+            var response = await producer.ProduceAsync("test-topic", new Message<Null, string> { Value = testMessage });
+            Console.WriteLine(response.ToString());
 
-            //var consumeResult = consumer.Consume(new CancellationToken());
-            //consumer.Close();
+            consumer.Subscribe("test-topic");
+            var consumeResult = consumer.Consume(new CancellationToken());
+            Console.WriteLine(consumeResult.Message.Value);
+            Assert.Equal(testMessage, consumeResult.Message.Value);
+            consumer.Close();
+
         }
     }
 }
