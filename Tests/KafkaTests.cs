@@ -9,7 +9,7 @@ namespace Tests
     {
 
         [Fact]
-        public void ProduceToTopicThenConsume()
+        public async Task ProduceToTopicThenConsumeAsync()
         {
             //Arrange
             var testMessage = "test message";
@@ -18,7 +18,8 @@ namespace Tests
 
             //Act
             Console.WriteLine($"Attempt to produce message: {testMessage}");
-            producer.Produce("test-topic", new Message<Null, string> { Value = testMessage });
+            await producer.ProduceAsync("test-topic", new Message<Null, string> { Value = testMessage });
+            Thread.Sleep(1000);
             consumer.Subscribe("test-topic");
             var consumeResult = consumer.Consume(new CancellationToken());
             Console.WriteLine($"Consumed message: {consumeResult.Message.Value}");
