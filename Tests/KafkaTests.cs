@@ -12,15 +12,15 @@ namespace Tests
         public async Task ProduceToTopicThenConsumeAsync()
         {
             //Arrange
-            var testMessage = "test message";
+            var testMessage = "{}";
             var consumer = GetTestConsumer();
             var producer = GetTestProducer();
 
             //Act
             Console.WriteLine($"Attempt to produce message: {testMessage}");
-            await producer.ProduceAsync("test-topic", new Message<Null, string> { Value = testMessage });
+            await producer.ProduceAsync("inbound-test-topic-1", new Message<Null, string>() { Value = testMessage });
             Thread.Sleep(1000);
-            consumer.Subscribe("test-topic");
+            consumer.Subscribe("outbound-test-topic-1");
             var consumeResult = consumer.Consume(new CancellationToken());
             Console.WriteLine($"Consumed message: {consumeResult.Message.Value}");
             consumer.Close();
@@ -33,7 +33,7 @@ namespace Tests
         {
             var produceConfig = new ProducerConfig
             {
-                BootstrapServers = "kafka1:19092",
+                BootstrapServers = "localhost:9092",
             };
 
             return new ProducerBuilder<Null, string>(produceConfig).Build();
@@ -43,7 +43,7 @@ namespace Tests
         {
             var consumeConfig = new ConsumerConfig
             {
-                BootstrapServers = "kafka1:19092",
+                BootstrapServers = "localhost:9092",
                 GroupId = "test-group-id",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };

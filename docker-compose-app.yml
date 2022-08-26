@@ -36,7 +36,16 @@ services:
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
     depends_on:
       - zoo1
-
+  app:
+    container_name: app
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    volumes:
+      - ./src:/app
+    working_dir: /app
+    command: "dotnet run"
+    depends_on:
+      - kafka1
+  
   integration-tests:
     container_name: integration-tests
     image: mcr.microsoft.com/dotnet/sdk:6.0
@@ -45,4 +54,6 @@ services:
     working_dir: /test
     command: "dotnet test Tests.csproj"
     depends_on:
-      - kafka1
+      - app
+
+  
