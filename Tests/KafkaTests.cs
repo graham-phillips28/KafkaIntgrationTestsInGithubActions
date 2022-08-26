@@ -1,5 +1,8 @@
 using Confluent.Kafka;
+using MassTransit;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
+using Newtonsoft.Json;
 using System.Net;
 using System.Threading;
 
@@ -9,24 +12,31 @@ namespace Tests
     {
 
         [Fact]
-        public async Task ProduceToTopicThenConsumeAsync()
+        public void ProduceToTopicThenConsumeAsync()
         {
             //Arrange
-            var testMessage = "{}";
+            var testString = "test string";
+            var testMessage = JsonConvert.SerializeObject(new Message<Null, string>() { Value = testString });
             var consumer = GetTestConsumer();
             var producer = GetTestProducer();
-
+            //Consume old messages
+            consumer.Subscribe("outbound-test-topic-1");
+            var consumeOldMessages = consumer.Consume(3000);
+            while(consumeOldMessages != null)
+            {
+                consumeOldMessages = consumer.Consume(3000);
+            }
             //Act
             Console.WriteLine($"Attempt to produce message: {testMessage}");
-            await producer.ProduceAsync("inbound-test-topic-1", new Message<Null, string>() { Value = testMessage });
+            producer.Produce("inbound-test-topic-1", new Message<Null, string>() { Value = testMessage });
             Thread.Sleep(1000);
-            consumer.Subscribe("outbound-test-topic-1");
             var consumeResult = consumer.Consume(new CancellationToken());
             Console.WriteLine($"Consumed message: {consumeResult.Message.Value}");
             consumer.Close();
+            var deserializedMessage = JsonConvert.DeserializeObject<Message<Null, string>>(consumeResult.Message.Value);
 
             //Assert
-            Assert.Equal(testMessage, consumeResult.Message.Value);
+            Assert.Equal(testString + " changed by application", deserializedMessage.Value);
         }
 
         public IProducer<Null, string> GetTestProducer()
@@ -44,7 +54,7 @@ namespace Tests
             var consumeConfig = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = "test-group-id",
+                GroupId = "local-test-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 

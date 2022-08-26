@@ -37,16 +37,27 @@ namespace KafkaIntgrationTestsInGithubActions
                 BootstrapServers = consumerSettings.Endpoint,
             };
 
-
+            //Initialise inbound topic
             var producer = new ProducerBuilder<Null, string>(config).Build();
             producer.Produce(consumerSettings.Topic, new Message<Null, string>
             { Value = "{}" });
-            producer.Produce(producerSettings.Topic, new Message<Null, string>
-            { Value = "{}" });
+            var consumerConfig = new ConsumerConfig
+            {
+                BootstrapServers = consumerSettings.Endpoint,
+                GroupId = consumerSettings.GroupId
+            };
+            var consumer = new ConsumerBuilder<string, string>(consumerConfig)
+                .SetPartitionsAssignedHandler((c, partitions) =>
+                {
+                    var offsets = partitions.Select(tp => new TopicPartitionOffset(tp, Offset.End));
+                    return offsets;
+                })
+                .Build();
+
             services.ConfigureMassTransit(consumerSettings, producerSettings);
             services.AddSingleton<IStringHandler, StringHandler>();
 
-            
+
 
             // http://localhost:5000/health, https://localhost:5001/health
             services.AddHealthChecks();
