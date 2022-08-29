@@ -14,6 +14,9 @@ namespace Tests
         [Fact]
         public void ProduceToTopicThenConsumeAsync()
         {
+            Console.WriteLine("Pausing to ensure app is running..");
+            Thread.Sleep(10000);
+            Console.WriteLine("Test starting..");
             //Arrange
             var testString = "test string";
             var testMessage = JsonConvert.SerializeObject(new Message<Null, string>() { Value = testString });
@@ -43,7 +46,8 @@ namespace Tests
         {
             var produceConfig = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092",
+                //BootstrapServers = "localhost:9092",
+                BootstrapServers = "kafka1:19092",
             };
 
             return new ProducerBuilder<Null, string>(produceConfig).Build();
@@ -53,7 +57,8 @@ namespace Tests
         {
             var consumeConfig = new ConsumerConfig
             {
-                BootstrapServers = "localhost:9092",
+                //BootstrapServers = "localhost:9092",
+                BootstrapServers = "kafka1:19092",
                 GroupId = "local-test-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };

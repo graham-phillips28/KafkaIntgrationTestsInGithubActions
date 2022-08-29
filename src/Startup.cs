@@ -44,9 +44,25 @@ namespace KafkaIntgrationTestsInGithubActions
             var consumerConfig = new ConsumerConfig
             {
                 BootstrapServers = consumerSettings.Endpoint,
-                GroupId = consumerSettings.GroupId
+                GroupId = "local-test-group"
             };
             var consumer = new ConsumerBuilder<string, string>(consumerConfig)
+                .SetPartitionsAssignedHandler((c, partitions) =>
+                {
+                    var offsets = partitions.Select(tp => new TopicPartitionOffset(tp, Offset.End));
+                    return offsets;
+                })
+                .Build();
+
+            //Initialise outbound topic
+            producer.Produce(producerSettings.Topic, new Message<Null, string>
+            { Value = "{}" });
+            var consumerConfig2 = new ConsumerConfig
+            {
+                BootstrapServers = producerSettings.Endpoint,
+                GroupId = "local-test-group"
+            };
+            var consumer2 = new ConsumerBuilder<string, string>(consumerConfig)
                 .SetPartitionsAssignedHandler((c, partitions) =>
                 {
                     var offsets = partitions.Select(tp => new TopicPartitionOffset(tp, Offset.End));
