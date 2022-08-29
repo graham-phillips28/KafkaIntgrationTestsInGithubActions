@@ -11,6 +11,7 @@ using KafkaIntgrationTestsInGithubActions.Application.Interfaces;
 using KafkaIntgrationTestsInGithubActions.Application;
 using Confluent.Kafka;
 using System.Net;
+using KafkaIntgrationTestsInGithubActions.TestHelpers;
 
 namespace KafkaIntgrationTestsInGithubActions
 {
@@ -31,45 +32,9 @@ namespace KafkaIntgrationTestsInGithubActions
             var producerSettings = new ProducerSettings(Configuration);
             services.AddSingleton(producerSettings);
             services.AddSingleton<IProducer, Producer>();
-            //Initialise topics
-            var config = new ProducerConfig
-            {
-                BootstrapServers = consumerSettings.Endpoint,
-            };
 
-            //Initialise inbound topic
-            var producer = new ProducerBuilder<Null, string>(config).Build();
-            producer.Produce(consumerSettings.Topic, new Message<Null, string>
-            { Value = "{}" });
-            var consumerConfig = new ConsumerConfig
-            {
-                BootstrapServers = consumerSettings.Endpoint,
-                GroupId = "local-test-group"
-            };
-            var consumer = new ConsumerBuilder<string, string>(consumerConfig)
-                .SetPartitionsAssignedHandler((c, partitions) =>
-                {
-                    var offsets = partitions.Select(tp => new TopicPartitionOffset(tp, Offset.End));
-                    return offsets;
-                })
-                .Build();
-
-            //Initialise outbound topic
-            producer.Produce(producerSettings.Topic, new Message<Null, string>
-            { Value = "{}" });
-            var consumerConfig2 = new ConsumerConfig
-            {
-                BootstrapServers = producerSettings.Endpoint,
-                GroupId = "local-test-group"
-            };
-            var consumer2 = new ConsumerBuilder<string, string>(consumerConfig)
-                .SetPartitionsAssignedHandler((c, partitions) =>
-                {
-                    var offsets = partitions.Select(tp => new TopicPartitionOffset(tp, Offset.End));
-                    return offsets;
-                })
-                .Build();
-
+            GithubActionTestHelpers.InitialiseTestTopicsAndResetTestConsumers(consumerSettings, producerSettings);
+            
             services.ConfigureMassTransit(consumerSettings, producerSettings);
             services.AddSingleton<IStringHandler, StringHandler>();
 

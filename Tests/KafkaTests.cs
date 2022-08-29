@@ -22,6 +22,7 @@ namespace Tests
             var testMessage = JsonConvert.SerializeObject(new Message<Null, string>() { Value = testString });
             var consumer = GetTestConsumer();
             var producer = GetTestProducer();
+
             //Consume old messages
             consumer.Subscribe("outbound-test-topic-1");
             var consumeOldMessages = consumer.Consume(3000);
