@@ -18,6 +18,7 @@ namespace KafkaIntgrationTestsInGithubActions.Kafka
         }
         public async Task Consume(ConsumeContext<Message<Null, string>> context)
         {
+            Console.WriteLine(context.Message.Value);
             await _handler.Handle(context.Message.Value);
         }
     }

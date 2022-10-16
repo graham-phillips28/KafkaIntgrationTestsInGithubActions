@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaIntgrationTestsInGithubActions", "KafkaIntgrationTestsInGithubActions.csproj", "{0C0216ED-3824-4BC6-8D73-73AC0B631CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{E72BA26E-3DA1-4EC4-8B67-1C6F32FDC576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "..\Tests\Tests.csproj", "{E72BA26E-3DA1-4EC4-8B67-1C6F32FDC576}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
