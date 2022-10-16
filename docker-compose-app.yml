@@ -38,10 +38,10 @@ services:
       - zoo1
     healthcheck:
       test: kafka-topics --bootstrap-server kafka1:29092 --list || exit 1
-      interval: 10s
+      interval: 20s
       retries: 10
       start_period: 5s
-      timeout: 10s
+      timeout: 20s
   
   init-kafka:
     container_name: init-kafka
