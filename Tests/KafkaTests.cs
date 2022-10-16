@@ -33,7 +33,8 @@ namespace NUnitTests
                     consumeResult = _consumer.Consume();
                 }
             });
-            Thread.Sleep(15000);
+            Thread.Sleep(30000);
+            KickOff();
         }
 
         [Test]
@@ -106,22 +107,13 @@ namespace NUnitTests
             Assert.That(_latestMessage.Value, Is.EqualTo(testString + " changed by application"));
         }
 
-        [Test]
-        public void ProduceToTopicThenConsumeFive()
+        public void KickOff()
         {
-            //Arrange
-            var testString = "test string 5";
+            var testString = "Kick off";
             var testMessage = JsonConvert.SerializeObject(new Message<Null, string>() { Value = testString });
-            Console.WriteLine("Producing to inbound topic: " + testString);
-
-            //Act
             _producer.Produce("inbound-test-topic-1", new Message<Null, string>() { Value = testMessage });
-
             Thread.Sleep(2000);
             Console.WriteLine("Consumed from outbound topic: " + _latestMessage.Value);
-
-            //Assert
-            Assert.That(_latestMessage.Value, Is.EqualTo(testString + " changed by application"));
         }
 
         public IProducer<Null, string> GetTestProducer()

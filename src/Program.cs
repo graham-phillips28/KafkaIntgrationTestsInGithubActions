@@ -13,6 +13,7 @@ namespace KafkaIntgrationTestsInGithubActions
         public static void Main(string[] args)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            Console.WriteLine(environment);
             var pathToContentRoot = Directory.GetCurrentDirectory();
 
             var configuration = new ConfigurationBuilder()
