@@ -65,8 +65,8 @@ services:
     working_dir: /app
     command: "dotnet run --environment Test"
     depends_on:
-      - kafka1
-      - init-kafka
+      init-kafka:
+        condition: service_completed_successfully
   
   integration-tests:
     container_name: integration-tests
