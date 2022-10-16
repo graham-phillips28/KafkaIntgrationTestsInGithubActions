@@ -36,13 +36,20 @@ services:
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
     depends_on:
       - zoo1
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka1:29092 --list || exit 1
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 10s
   
   init-kafka:
     container_name: init-kafka
     image: confluentinc/cp-kafka:7.2.1
     depends_on:
-      - kafka1
-      - zoo1
+      kafka1:
+        condition: service_healthy
+
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
