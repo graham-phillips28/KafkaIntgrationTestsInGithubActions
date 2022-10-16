@@ -39,7 +39,7 @@ services:
     healthcheck:
       test: kafka-topics --bootstrap-server kafka1:29092 --list || exit 1
       interval: 10s
-      retries: 5
+      retries: 10
       start_period: 5s
       timeout: 10s
   
