@@ -112,7 +112,7 @@ namespace NUnitTests
             var testString = "Kick off";
             var testMessage = JsonConvert.SerializeObject(new Message<Null, string>() { Value = testString });
             _producer.Produce("inbound-test-topic-1", new Message<Null, string>() { Value = testMessage });
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
             Console.WriteLine("Consumed from outbound topic: " + _latestMessage.Value);
         }
 
