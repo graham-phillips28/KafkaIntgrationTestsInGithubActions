@@ -33,7 +33,7 @@ namespace KafkaIntgrationTestsInGithubActions
             services.AddSingleton(producerSettings);
             services.AddSingleton<IProducer, Producer>();
 
-            GithubActionTestHelpers.InitialiseTestTopicsAndResetTestConsumers(consumerSettings, producerSettings);
+            //GithubActionTestHelpers.InitialiseTestTopicsAndResetTestConsumers(consumerSettings, producerSettings);
             
             services.ConfigureMassTransit(consumerSettings, producerSettings);
             services.AddSingleton<IStringHandler, StringHandler>();

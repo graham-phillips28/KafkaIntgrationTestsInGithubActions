@@ -16,44 +16,16 @@ namespace NUnitTests
         public KafkaTests()
         {
             _latestMessage = new Message<Null, string>();
-            Thread.Sleep(5000);
             _producer = GetTestProducer();
             _consumer = GetTestConsumer();
-            //var consumeResult = _consumer.Consume();
-
-            //Task.Run(() =>
-            //{
-            //    if (consumeResult != null)
-            //    {
-            //        _latestMessage = JsonConvert.DeserializeObject<Message<Null, string>>(consumeResult.Message.Value);
-            //    }
-            //    else
-            //    {
-            //        _latestMessage = new Message<Null, string>();
-            //    }
-            //    while (true)
-            //    {
-            //        consumeResult = _consumer.Consume();
-            //        _latestMessage = JsonConvert.DeserializeObject<Message<Null, string>>(consumeResult.Message.Value);
-            //    }
-            //});
         }
 
         [OneTimeSetUp]
         public void Initialize()
         {
-            //ConsumeResult<Null, string> consumeResult = new();
             _consumer.Subscribe("outbound-test-topic-1");
             Task.Run(() =>
             {
-                //if (consumeResult != null)
-                //{
-                //    _latestMessage = JsonConvert.DeserializeObject<Message<Null, string>>(consumeResult.Message.Value);
-                //}
-                //else
-                //{
-                //    _latestMessage = new Message<Null, string>();
-                //}
                 var consumeResult = _consumer.Consume();
                 while (true)
                 {
@@ -61,7 +33,7 @@ namespace NUnitTests
                     consumeResult = _consumer.Consume();
                 }
             });
-            Thread.Sleep(6000);
+            Thread.Sleep(15000);
         }
 
         [Test]

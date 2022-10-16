@@ -36,6 +36,27 @@ services:
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
     depends_on:
       - zoo1
+  
+  init-kafka:
+    container_name: init-kafka
+    image: confluentinc/cp-kafka:7.2.1
+    depends_on:
+      - kafka1
+      - zoo1
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka1:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka1:29092 --create --if-not-exists --topic outbound-test-topic-1 --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka1:29092 --create --if-not-exists --topic inbound-test-topic-1 --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka1:29092 --list
+      "
+
   app:
     container_name: app
     image: mcr.microsoft.com/dotnet/sdk:6.0
@@ -45,6 +66,7 @@ services:
     command: "dotnet run"
     depends_on:
       - kafka1
+      - init-kafka
   
   integration-tests:
     container_name: integration-tests
@@ -55,5 +77,6 @@ services:
     command: "dotnet test Tests.csproj"
     depends_on:
       - app
+      - init-kafka
 
   
