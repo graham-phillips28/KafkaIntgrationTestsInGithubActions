@@ -15,7 +15,6 @@ namespace NUnitTests
 
         public KafkaTests()
         {
-            //Change for demo
             _latestMessage = new Message<Null, string>();
             _producer = GetTestProducer();
             _consumer = GetTestConsumer();
