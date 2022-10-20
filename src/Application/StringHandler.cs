@@ -1,11 +1,6 @@
 ﻿using Confluent.Kafka;
 using KafkaIntgrationTestsInGithubActions.Application.Interfaces;
 using KafkaIntgrationTestsInGithubActions.Kafka.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KafkaIntgrationTestsInGithubActions.Application
 {
