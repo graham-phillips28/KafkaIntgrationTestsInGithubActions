@@ -23,7 +23,6 @@ namespace NUnitTests
         [OneTimeSetUp]
         public void Initialize()
         {
-            //Change for demo
             _consumer.Subscribe("outbound-test-topic-1");
             Task.Run(() =>
             {
