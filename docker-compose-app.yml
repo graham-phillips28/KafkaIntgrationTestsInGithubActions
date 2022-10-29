@@ -1,6 +1,15 @@
 version: '2.1'
 
 services:
+  rabbitmq:
+    image: masstransit/rabbitmq
+    container_name: rabbitmq
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+    ports:
+        - "5672:5672"
+        - "15672:15672"
   zoo1:
     image: confluentinc/cp-zookeeper:7.2.1
     hostname: zoo1
@@ -11,6 +20,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_SERVERS: zoo1:2888:3888
+    depends_on:
+      - rabbitmq
 
   kafka1:
     image: confluentinc/cp-kafka:7.2.1
@@ -42,7 +53,6 @@ services:
       retries: 10
       start_period: 5s
       timeout: 10s
-  
   init-kafka:
     container_name: init-kafka
     image: confluentinc/cp-kafka:7.2.1

@@ -5,6 +5,8 @@ using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Security;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,12 +15,20 @@ namespace KafkaIntgrationTestsInGithubActions.MassTransit
     public static partial class Configuration
     {
         public static void ConfigureMassTransit(this IServiceCollection services,
-            ConsumerSettings consumerSettings, ProducerSettings producerSettings)
+            ConsumerSettings consumerSettings, ProducerSettings producerSettings, RabbitMessageBusSettings rabbitMessageBusSettings)
         {
             services.AddMassTransit(mt =>
             {
 
-                mt.UsingRabbitMq((context, cfg) => cfg.ConfigureEndpoints(context));
+                mt.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(new Uri(rabbitMessageBusSettings.Endpoint), h =>
+                    {
+                        h.Username(rabbitMessageBusSettings.Username);
+                        h.Password(rabbitMessageBusSettings.Password);
+                        
+                    });
+                });
 
 
 

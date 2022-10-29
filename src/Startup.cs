@@ -32,10 +32,12 @@ namespace KafkaIntgrationTestsInGithubActions
             var producerSettings = new ProducerSettings(Configuration);
             services.AddSingleton(producerSettings);
             services.AddSingleton<IProducer, Producer>();
+            var rabbitSettings = new RabbitMessageBusSettings(Configuration);
+            services.AddSingleton(rabbitSettings);
 
             //GithubActionTestHelpers.InitialiseTestTopicsAndResetTestConsumers(consumerSettings, producerSettings);
-            
-            services.ConfigureMassTransit(consumerSettings, producerSettings);
+
+            services.ConfigureMassTransit(consumerSettings, producerSettings, rabbitSettings);
             services.AddSingleton<IStringHandler, StringHandler>();
 
 
