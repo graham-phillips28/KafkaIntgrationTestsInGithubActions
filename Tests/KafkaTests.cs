@@ -8,7 +8,8 @@ using System.Threading;
 namespace NUnitTests
 {
     public class KafkaTests
-    {
+    {   
+        //change for demo
         private Message<Null, string> _latestMessage;
         private IProducer<Null, string> _producer;
         private IConsumer<Null, string> _consumer;
