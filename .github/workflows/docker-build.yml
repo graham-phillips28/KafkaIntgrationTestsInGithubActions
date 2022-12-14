@@ -2,7 +2,7 @@ name: Kafka Integration Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ without-app-running-in-pipeline ]
 
 jobs:
   build:
